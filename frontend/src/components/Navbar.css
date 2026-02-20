@@ -1,0 +1,164 @@
+/* Navbar.css */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    box-sizing: border-box;
+    z-index: 1000;
+    background: transparent;
+    font-family: 'Inter', sans-serif;
+}
+
+.navbar-logo {
+    font-size: 24px;
+    font-weight: 600;
+    color: #fff;
+    letter-spacing: 1px;
+    text-decoration: none;
+}
+
+.navbar-menu {
+    display: flex;
+    align-items: center;
+    background: rgba(20, 20, 20, 0.6);
+    padding: 0 30px;
+    /* Reset vertical padding, use height for alignment */
+    height: 54px;
+    /* Fixed height to match button */
+    border-radius: 50px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    gap: 30px;
+    box-sizing: border-box;
+}
+
+.navbar-link {
+    color: rgba(255, 255, 255, 0.2);
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 400;
+    transition: color 0.3s ease;
+}
+
+.navbar-link:hover,
+.navbar-link.active {
+    color: rgba(253, 81, 8, 0.7);
+}
+
+.navbar-button {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: transparent;
+    border: 1px solid rgba(253, 81, 8, 0.7);
+    border-radius: 30px;
+    padding: 0 20px;
+    /* Reset vertical padding */
+    height: 54px;
+    /* Fixed height to match menu */
+    color: #ffffff;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    margin-right: 20px;
+    box-sizing: border-box;
+}
+
+.navbar-button:hover {
+    background: rgba(253, 81, 8, 0.1);
+}
+
+.navbar-icon {
+    width: 16px;
+    height: 16px;
+    object-fit: contain;
+    filter: invert(1);
+}
+
+.navbar-right {
+    display: flex;
+    align-items: center;
+}
+
+.hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    margin-left: 20px;
+}
+
+.bar {
+    width: 25px;
+    height: 3px;
+    background-color: white;
+    transition: all 0.3s ease;
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+    .navbar {
+        padding: 20px;
+    }
+
+    .navbar-menu {
+        position: fixed;
+        top: 80px;
+        left: 50%;
+        transform: translateX(-50%);
+        flex-direction: column;
+        background: rgba(20, 20, 20, 0.95);
+        width: 90%;
+        height: auto;
+        padding: 20px;
+        border-radius: 20px;
+        gap: 20px;
+        display: none;
+        /* Hide by default on mobile */
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .navbar-menu.open {
+        display: flex;
+    }
+
+    .hamburger {
+        display: flex;
+    }
+
+    .bar.open:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 5px);
+    }
+
+    .bar.open:nth-child(2) {
+        opacity: 0;
+    }
+
+    .bar.open:nth-child(3) {
+        transform: rotate(-45deg) translate(5px, -6px);
+    }
+
+    .navbar-button {
+        padding: 0 15px;
+        height: 44px;
+        margin-right: 0;
+    }
+
+    .navbar-button span {
+        display: none;
+        /* Hide text on very small screens if needed, or keep smaller */
+    }
+
+    /* Show icon only on small mobile? Or keep standard? */
+    /* Let's keep button visible but compact */
+    .navbar-button span {
+        display: block;
+        font-size: 10px;
+    }
+}

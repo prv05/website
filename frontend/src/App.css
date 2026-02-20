@@ -1,0 +1,24 @@
+/* App.css */
+.background-glow {
+    position: fixed;
+    top: -20vh;
+    right: -60vw;
+    width: 150vw;
+    height: 150vw;
+    background: radial-gradient(circle, rgba(253, 81, 8, 0.8) 0%, rgba(0, 0, 0, 0) 65%);
+    filter: blur(100px);
+    z-index: -1;
+    pointer-events: none;
+    transform: rotate(180deg) scaleX(-1);
+}
+
+@media (max-width: 768px) {
+    .background-glow {
+        width: 200vw;
+        height: 200vw;
+        top: -30vh;
+        right: -100vw;
+        /* Shift more to the right/center for mobile */
+        filter: blur(80px);
+    }
+}
