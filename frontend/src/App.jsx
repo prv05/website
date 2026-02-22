@@ -6,6 +6,7 @@ import About from './components/About'
 import Experience from './components/Experience'
 import Connect from './components/Connect'
 import Skills from './components/Skills'
+import Resume from './components/Resume'
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route path="/experience" element={<Experience />} />
           <Route path="/connect" element={<Connect />} />
           <Route path="/skills" element={<Skills />} />
+          <Route path="/resume" element={<Resume />} />
         </Routes>
       </main>
     </div>
