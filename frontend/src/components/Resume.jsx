@@ -1,9 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import cvIcon from '../assets/cv.png';
 
 const Resume = () => {
     const resumeUrl = '/resume.pdf';
-    const [loaded, setLoaded] = useState(false);
+    // null = checking, true = PDF exists, false = not found
+    const [pdfReady, setPdfReady] = useState(null);
+
+    useEffect(() => {
+        fetch(resumeUrl, { method: 'HEAD' })
+            .then(res => {
+                const ct = res.headers.get('content-type') || '';
+                setPdfReady(res.ok && ct.includes('pdf'));
+            })
+            .catch(() => setPdfReady(false));
+    }, [resumeUrl]);
+
 
     return (
         <section
@@ -64,23 +75,49 @@ const Resume = () => {
                         </span>
                     </div>
 
-                    {/* Skeleton Loader */}
-                    {!loaded && (
-                        <div className="absolute inset-0 top-[52px] flex flex-col items-center justify-center gap-4 bg-[#0a0a0a]/80 z-10 pointer-events-none">
-                            <div className="w-12 h-12 border-2 border-[#fd5108]/40 border-t-[#fd5108] rounded-full animate-spin" />
-                            <span className="text-white/30 text-sm tracking-wider">Loading resume…</span>
+                    {/* Loading state */}
+                    {pdfReady === null && (
+                        <div className="flex flex-col items-center justify-center gap-4 py-24">
+                            <div className="w-10 h-10 border-2 border-[#fd5108]/40 border-t-[#fd5108] rounded-full animate-spin" />
+                            <span className="text-white/30 text-sm tracking-wider">Checking for resume…</span>
                         </div>
                     )}
 
-                    {/* Embedded PDF */}
-                    <iframe
-                        src={`${resumeUrl}#toolbar=0&navpanes=0&scrollbar=1`}
-                        title="Pratham Vernekar Resume"
-                        className="w-full border-0"
-                        style={{ height: 'min(85vh, 1100px)' }}
-                        onLoad={() => setLoaded(true)}
-                    />
+                    {/* PDF found — embed it */}
+                    {pdfReady === true && (
+                        <object
+                            data={resumeUrl}
+                            type="application/pdf"
+                            className="w-full border-0"
+                            style={{ height: 'min(85vh, 1100px)' }}
+                        >
+                            <p className="text-white/40 text-sm p-8 text-center">
+                                Your browser does not support inline PDFs.{' '}
+                                <a href={resumeUrl} target="_blank" rel="noopener noreferrer"
+                                    className="text-[#fd5108] underline">Open PDF</a>
+                            </p>
+                        </object>
+                    )}
+
+                    {/* No PDF yet — show placeholder */}
+                    {pdfReady === false && (
+                        <div className="flex flex-col items-center justify-center gap-6 py-24 px-8 text-center">
+                            <div className="w-20 h-20 rounded-2xl bg-[#fd5108]/10 border border-[#fd5108]/20 flex items-center justify-center">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-10 h-10 text-[#fd5108]/60">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <p className="text-white/60 text-base font-medium mb-1">No resume found</p>
+                                <p className="text-white/30 text-sm">
+                                    Place your resume at{' '}
+                                    <code className="text-[#fd5108]/70 bg-white/5 px-1.5 py-0.5 rounded text-xs">public/resume.pdf</code>
+                                </p>
+                            </div>
+                        </div>
+                    )}
                 </div>
+
 
                 {/* Fallback note */}
                 <p className="text-center text-white/25 text-xs tracking-wider">
