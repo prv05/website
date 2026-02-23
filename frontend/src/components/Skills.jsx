@@ -34,6 +34,10 @@ import solidityIcon from '../assets/Solidity.png';
 import tailwindIcon from '../assets/Tailwind CSS.png';
 import tensorflowIcon from '../assets/TensorFlow.png';
 import huggingFaceIcon from '../assets/hugging face.png';
+import numpyIcon from '../assets/NumPy.png';
+import pandasIcon from '../assets/Pandas.png';
+import pytorchIcon from '../assets/pytorch.png';
+import chromadbIcon from '../assets/chormadb.png';
 
 const skillsCategories = [
     {
@@ -79,7 +83,11 @@ const skillsCategories = [
         title: "AI & Machine Learning",
         skills: [
             { name: 'TensorFlow', icon: tensorflowIcon, usage: "Building and training deep learning neural network models.", academic: "Machine learning architectures and neural network theory.", projects: "Developing custom computer vision and NLP models." },
+            { name: 'PyTorch', icon: pytorchIcon, usage: "Flexible deep learning research and production model training.", academic: "Neural network theory, backpropagation, and model optimization.", projects: "Custom model training pipelines and experiment tracking." },
             { name: 'Hugging Face', icon: huggingFaceIcon, usage: "Leveraging state-of-the-art pre-trained transformer models.", academic: "Advanced natural language processing exploration.", projects: "Integrating LLMs and deploying powerful NLP capabilities quickly." },
+            { name: 'NumPy', icon: numpyIcon, usage: "High-performance numerical computing and array operations.", academic: "Linear algebra, statistics, and scientific computing coursework.", projects: "Data preprocessing and matrix operations in ML pipelines." },
+            { name: 'Pandas', icon: pandasIcon, usage: "Data manipulation, cleaning, and exploratory data analysis.", academic: "Data science assignments and structured dataset analysis.", projects: "ETL pipelines, CSV/JSON data wrangling, and feature engineering." },
+            { name: 'ChromaDB', icon: chromadbIcon, usage: "Vector database for storing and querying embeddings in AI applications.", academic: "Retrieval-augmented generation (RAG) and semantic search research.", projects: "Building LLM-powered search and knowledge-base retrieval systems." },
         ]
     },
     {
