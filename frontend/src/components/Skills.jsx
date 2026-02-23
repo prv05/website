@@ -19,6 +19,22 @@ import postgresIcon from '../assets/PostgresSQL.png';
 import pythonIcon from '../assets/Python.png';
 import reactIcon from '../assets/React.png';
 
+// New icons
+import arduinoIcon from '../assets/Arduino.png';
+import bootstrapIcon from '../assets/Bootstrap.png';
+import expressIcon from '../assets/Express.png';
+import hardhatIcon from '../assets/Hardhat.png';
+import jsIcon from '../assets/JavaScript.png';
+import linuxIcon from '../assets/Linux.png';
+import mysqlIcon from '../assets/MySQL.png';
+import postmanIcon from '../assets/Postman.png';
+import rabbitmqIcon from '../assets/RabbitMQ.png';
+import raspberryPiIcon from '../assets/Raspberry Pi.png';
+import solidityIcon from '../assets/Solidity.png';
+import tailwindIcon from '../assets/Tailwind CSS.png';
+import tensorflowIcon from '../assets/TensorFlow.png';
+import huggingFaceIcon from '../assets/hugging face.png';
+
 const skillsCategories = [
     {
         title: "Programming Languages",
@@ -27,6 +43,7 @@ const skillsCategories = [
             { name: 'C++', icon: cppIcon, usage: "Object-oriented programming, competitive programming, and performance-critical applications.", academic: "Advanced algorithms, design patterns, and graphics programming.", projects: "Game engine components and high-performance computation scripts." },
             { name: 'Python', icon: pythonIcon, usage: "Rapid prototyping, data analysis, machine learning, and backend scripting.", academic: "Used extensively for data science, AI assignments, and automation.", projects: "Scripting, API development with Flask, and data pipelines." },
             { name: 'Java', icon: javaIcon, usage: "Enterprise application development, Android development, and robust backend services.", academic: "Software engineering principles, OOP design, and enterprise systems.", projects: "Backend services and Android mobile application development." },
+            { name: 'JavaScript', icon: jsIcon, usage: "Adding interactivity and dynamic behavior to web applications.", academic: "Web programming and interactive systems.", projects: "Frontend logic, DOM manipulation, and asynchronous data fetching." },
         ]
     },
     {
@@ -36,19 +53,47 @@ const skillsCategories = [
             { name: 'CSS3', icon: cssIcon, usage: "Styling modern web applications with responsive design, animations, and layouts.", academic: "Advanced styling techniques, CSS Grid, and Flexbox.", projects: "Custom styling for luxury e-commerce platforms and animated dashboards." },
             { name: 'React', icon: reactIcon, usage: "Building dynamic, component-driven user interfaces and single-page applications.", academic: "Frontend architectures, state management, and modern web frameworks.", projects: "Primary framework for portfolio, educational platforms (PathshalaAI), and e-commerce UI." },
             { name: 'Node.js', icon: nodeIcon, usage: "Developing scalable network applications and asynchronous backend services.", academic: "Server-side programming, RESTful API design, and asynchronous networking.", projects: "Backend API development, authentication services, and microservices." },
+            { name: 'Express', icon: expressIcon, usage: "Building robust backend APIs and web server infrastructure routing.", academic: "Web server development and API design.", projects: "Building the backbone for custom web applications and microservices." },
             { name: 'Flask', icon: flaskIcon, usage: "Creating lightweight, extensible Python web applications and APIs.", academic: "Web backend assignments and micro-service architectures.", projects: "Quick API generation for data-driven projects and ML model serving." },
+            { name: 'Tailwind CSS', icon: tailwindIcon, usage: "Rapid UI development using utility-first CSS classes.", academic: "Modern frontend tooling and rapid prototyping.", projects: "Efficiently styling responsive web applications and dashboards." },
+            { name: 'Bootstrap', icon: bootstrapIcon, usage: "Developing responsive, mobile-first web pages quickly.", academic: "Introduction to CSS frameworks and grid systems.", projects: "Rapid prototyping and building grid-based layouts." },
         ]
     },
     {
         title: "Cloud & DevOps",
         skills: [
             { name: 'PostgreSQL', icon: postgresIcon, usage: "Designing robust, relational database schemas and complex queries.", academic: "Database management systems, normalization, and relational algebra.", projects: "Primary data store for e-commerce user profiles and transaction history." },
+            { name: 'MySQL', icon: mysqlIcon, usage: "Managing relational databases for web applications.", academic: "Introduction to SQL and relational database design.", projects: "Backend data storage and structured querying." },
             { name: 'Docker', icon: dockerIcon, usage: "Containerizing applications for consistent deployment across environments.", academic: "Environment virtualization and modern deployment workflows.", projects: "Containerizing web servers and databases for streamlined local development." },
             { name: 'AWS', icon: awsIcon, usage: "Deploying and scaling applications using robust cloud infrastructure services.", academic: "Cloud computing architectures and distributed systems.", projects: "Hosting web applications, managing S3 buckets, and serverless compute." },
             { name: 'Google Cloud', icon: gcpIcon, usage: "Leveraging cloud services for hosting, data analytics, and machine learning APIs.", academic: "Cloud provisioning and server management.", projects: "Integrating specialized Google APIs and hosting scalable web applications." },
+            { name: 'Linux', icon: linuxIcon, usage: "Operating system management, shell scripting, and server administration.", academic: "Operating systems concepts and command-line proficiency.", projects: "Server deployment environments and system administration." },
+            { name: 'RabbitMQ', icon: rabbitmqIcon, usage: "Message queuing for building decoupled, distributed systems.", academic: "Distributed systems and message-oriented middleware.", projects: "Handling asynchronous tasks and inter-service communication." },
             { name: 'Git', icon: gitIcon, usage: "Version control for tracking code changes and collaborating on software projects.", academic: "Team-based software engineering projects.", projects: "Source control for all personal and professional development projects." },
             { name: 'GitHub', icon: githubIcon, usage: "Hosting code repositories, managing CI/CD pipelines, and open-source contribution.", academic: "Project submissions and peer code reviews.", projects: "Portfolio repository hosting and automated deployment actions." },
+            { name: 'Postman', icon: postmanIcon, usage: "API development, testing, and endpoint documentation.", academic: "API design and backend testing methodologies.", projects: "Verifying web server routes and streamlining backend troubleshooting." },
             { name: 'Figma', icon: figmaIcon, usage: "Designing user interfaces, wireframes, and interactive prototypes.", academic: "HCI (Human-Computer Interaction) UI/UX assignments.", projects: "Designing high-fidelity mockups for luxury car stores and EdTech platforms." }
+        ]
+    },
+    {
+        title: "AI & Machine Learning",
+        skills: [
+            { name: 'TensorFlow', icon: tensorflowIcon, usage: "Building and training deep learning neural network models.", academic: "Machine learning architectures and neural network theory.", projects: "Developing custom computer vision and NLP models." },
+            { name: 'Hugging Face', icon: huggingFaceIcon, usage: "Leveraging state-of-the-art pre-trained transformer models.", academic: "Advanced natural language processing exploration.", projects: "Integrating LLMs and deploying powerful NLP capabilities quickly." },
+        ]
+    },
+    {
+        title: "Hardware & IoT",
+        skills: [
+            { name: 'Arduino', icon: arduinoIcon, usage: "Prototyping microcontroller-based hardware projects.", academic: "Embedded systems and basic electronics.", projects: "Sensor integration and simple automation controllers." },
+            { name: 'Raspberry Pi', icon: raspberryPiIcon, usage: "Building single-board computer applications and home servers.", academic: "Internet of Things (IoT) networking and embedded Linux.", projects: "Self-hosted services and IoT gateway prototypes." },
+        ]
+    },
+    {
+        title: "Web3 & Blockchain",
+        skills: [
+            { name: 'Solidity', icon: solidityIcon, usage: "Writing smart contracts for Ethereum-based blockchain applications.", academic: "Cryptography and decentralized application architecture.", projects: "Developing smart contracts for decentralized finance (DeFi) platforms." },
+            { name: 'Hardhat', icon: hardhatIcon, usage: "Compiling, deploying, and testing Ethereum software.", academic: "Blockchain development environments.", projects: "Building and deploying robust smart contract networks and testing environments." },
         ]
     }
 ];
@@ -61,7 +106,9 @@ const Skills = () => {
     const gridRef = useRef(null);
     const modalRef = useRef(null);
     const audioCtxRef = useRef(null);
-    const [animationComplete, setAnimationComplete] = useState(false);
+    const [animationComplete, setAnimationComplete] = useState(() => {
+        return typeof window !== 'undefined' ? sessionStorage.getItem('hasSeenSkillsAnimation') === 'true' : false;
+    });
     const [selectedSkill, setSelectedSkill] = useState(null);
     const iconsRef = useRef([]);
 
@@ -113,20 +160,22 @@ const Skills = () => {
     useEffect(() => {
         if (selectedSkill && modalRef.current) {
             gsap.fromTo(modalRef.current,
-                { opacity: 0, scale: 0.8, rotationY: 45, rotationX: -15, z: -200 },
-                { opacity: 1, scale: 1, rotationY: 0, rotationX: 0, z: 0, duration: 0.8, ease: "back.out(1.2)", transformPerspective: 1500 }
+                { opacity: 0, scale: 0.95, rotationY: 10, rotationX: -5, z: -50 },
+                { opacity: 1, scale: 1, rotationY: 0, rotationX: 0, z: 0, duration: 0.3, ease: "power2.out", transformPerspective: 1500 }
             );
         }
     }, [selectedSkill]);
 
     useEffect(() => {
+        // If already completed from session storage, completely skip timeline registration
+        if (animationComplete) return;
+
         // Wait briefly for refs to populate on first render
         const icons = iconsRef.current.filter(Boolean);
         if (!icons || icons.length === 0) return;
 
         // Reset state for hot reloads
         gsap.killTweensOf(icons);
-        setAnimationComplete(false);
 
         // Get viewport dimensions
         const vh = window.innerHeight;
@@ -153,6 +202,8 @@ const Skills = () => {
         const tl = gsap.timeline({
             onComplete: () => {
                 setAnimationComplete(true);
+                // Mark animation as seen
+                sessionStorage.setItem('hasSeenSkillsAnimation', 'true');
             }
         });
 
@@ -244,7 +295,7 @@ const Skills = () => {
                                     <div
                                         key={skill.name}
                                         ref={(el) => (iconsRef.current[globalIndex] = el)}
-                                        onClick={() => animationComplete && setSelectedSkill(skill)}
+                                        onClick={() => setSelectedSkill(skill)}
                                         className={`w-[100px] h-[100px] sm:w-[120px] sm:h-[120px] md:w-[130px] md:h-[130px] flex flex-col items-center justify-center p-3 rounded-full bg-gradient-to-br from-white/10 to-[#050505] border-[3px] border-[#fd5108]/40 backdrop-blur-md transition-all duration-300 ${animationComplete ? 'hover:-translate-y-2 hover:border-[#fd5108] hover:shadow-[0_0_30px_rgba(253,81,8,0.5)] group cursor-pointer' : ''} shadow-[inset_0_4px_20px_rgba(255,255,255,0.1)] shrink-0`}
                                     >
                                         <div className="w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 flex items-center justify-center mb-1 transition-transform duration-300 group-hover:scale-110">
