@@ -1,153 +1,258 @@
-import React from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
+import gsap from 'gsap';
 
-const skillCategories = [
+// Import icons
+import awsIcon from '../assets/AWS.png';
+import cppIcon from '../assets/C++ (CPlusPlus).png';
+import cIcon from '../assets/C.png';
+import cssIcon from '../assets/CSS3.png';
+import dockerIcon from '../assets/Docker.png';
+import figmaIcon from '../assets/Figma.png';
+import flaskIcon from '../assets/Flask.png';
+import gitIcon from '../assets/Git.png';
+import githubIcon from '../assets/GitHub.png';
+import gcpIcon from '../assets/Google Cloud.png';
+import htmlIcon from '../assets/HTML5.png';
+import javaIcon from '../assets/Java.png';
+import nodeIcon from '../assets/Node.js.png';
+import postgresIcon from '../assets/PostgresSQL.png';
+import pythonIcon from '../assets/Python.png';
+import reactIcon from '../assets/React.png';
+
+const skillsCategories = [
     {
-        title: 'Frontend',
-        icon: '🎨',
-        color: '#fd5108',
+        title: "Programming Languages",
         skills: [
-            { name: 'React', level: 90 },
-            { name: 'JavaScript', level: 88 },
-            { name: 'HTML & CSS', level: 92 },
-            { name: 'Tailwind CSS', level: 85 },
-        ],
+            { name: 'C', icon: cIcon },
+            { name: 'C++', icon: cppIcon },
+            { name: 'Python', icon: pythonIcon },
+            { name: 'Java', icon: javaIcon },
+        ]
     },
     {
-        title: 'Backend',
-        icon: '⚙️',
-        color: '#fd5108',
+        title: "Fullstack",
         skills: [
-            { name: 'Node.js', level: 78 },
-            { name: 'Python', level: 82 },
-            { name: 'Express.js', level: 75 },
-            { name: 'REST APIs', level: 85 },
-        ],
+            { name: 'HTML5', icon: htmlIcon },
+            { name: 'CSS3', icon: cssIcon },
+            { name: 'React', icon: reactIcon },
+            { name: 'Node.js', icon: nodeIcon },
+            { name: 'Flask', icon: flaskIcon },
+        ]
     },
     {
-        title: 'AI / ML',
-        icon: '🤖',
-        color: '#fd5108',
+        title: "Cloud & DevOps",
         skills: [
-            { name: 'TensorFlow', level: 70 },
-            { name: 'Data Annotation', level: 88 },
-            { name: 'Scikit-Learn', level: 65 },
-            { name: 'Prompt Engineering', level: 80 },
-        ],
-    },
-    {
-        title: 'Cybersecurity',
-        icon: '🔐',
-        color: '#fd5108',
-        skills: [
-            { name: 'Network Security', level: 72 },
-            { name: 'CTF / Pentesting', level: 68 },
-            { name: 'Vulnerability Assessment', level: 70 },
-            { name: 'OSINT', level: 65 },
-        ],
-    },
-    {
-        title: 'Tools & DevOps',
-        icon: '🛠️',
-        color: '#fd5108',
-        skills: [
-            { name: 'Git & GitHub', level: 90 },
-            { name: 'VS Code', level: 95 },
-            { name: 'Linux', level: 75 },
-            { name: 'Docker', level: 60 },
-        ],
-    },
-    {
-        title: 'Databases',
-        icon: '🗄️',
-        color: '#fd5108',
-        skills: [
-            { name: 'MongoDB', level: 78 },
-            { name: 'MySQL', level: 72 },
-            { name: 'Firebase', level: 70 },
-            { name: 'PostgreSQL', level: 60 },
-        ],
-    },
+            { name: 'PostgreSQL', icon: postgresIcon },
+            { name: 'Docker', icon: dockerIcon },
+            { name: 'AWS', icon: awsIcon },
+            { name: 'Google Cloud', icon: gcpIcon },
+            { name: 'Git', icon: gitIcon },
+            { name: 'GitHub', icon: githubIcon },
+            { name: 'Figma', icon: figmaIcon }
+        ]
+    }
 ];
 
+// Flat array needed for initial GSAP animations reference easily
+const allSkillsFlat = skillsCategories.flatMap(cat => cat.skills);
+
 const Skills = () => {
+    const containerRef = useRef(null);
+    const gridRef = useRef(null);
+    const audioCtxRef = useRef(null);
+    const [animationComplete, setAnimationComplete] = useState(false);
+    const iconsRef = useRef([]);
+
+    // Initialize Web Audio API context on first interaction or mount
+    useEffect(() => {
+        // We create it but might need user interaction to fully resume it in some browsers
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (AudioContext) {
+            audioCtxRef.current = new AudioContext();
+        }
+    }, []);
+
+    const playCoinSound = useCallback(() => {
+        if (!audioCtxRef.current) return;
+
+        // Resume context if suspended (browser policy)
+        if (audioCtxRef.current.state === 'suspended') {
+            audioCtxRef.current.resume();
+        }
+
+        const ctx = audioCtxRef.current;
+        const osc1 = ctx.createOscillator();
+        const osc2 = ctx.createOscillator();
+        const gainNode = ctx.createGain();
+
+        // High frequency triangle waves sound more like metal
+        osc1.type = 'triangle';
+        osc2.type = 'sine';
+
+        // Frequencies for a metallic "clink"
+        osc1.frequency.setValueAtTime(4000 + Math.random() * 500, ctx.currentTime);
+        osc2.frequency.setValueAtTime(6000 + Math.random() * 500, ctx.currentTime);
+
+        // Very sharp attack and fast decay
+        gainNode.gain.setValueAtTime(0, ctx.currentTime);
+        gainNode.gain.linearRampToValueAtTime(0.1, ctx.currentTime + 0.01);
+        gainNode.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.1);
+
+        osc1.connect(gainNode);
+        osc2.connect(gainNode);
+        gainNode.connect(ctx.destination);
+
+        osc1.start();
+        osc2.start();
+        osc1.stop(ctx.currentTime + 0.1);
+        osc2.stop(ctx.currentTime + 0.1);
+    }, []);
+
+    useEffect(() => {
+        // Wait briefly for refs to populate on first render
+        const icons = iconsRef.current.filter(Boolean);
+        if (!icons || icons.length === 0) return;
+
+        // Reset state for hot reloads
+        gsap.killTweensOf(icons);
+        setAnimationComplete(false);
+
+        // Get viewport dimensions
+        const vh = window.innerHeight;
+        const vw = window.innerWidth;
+
+        // Setup initial "falling" stage - randomize positions at the bottom
+        icons.forEach((icon) => {
+            // Start way above the screen
+            gsap.set(icon, {
+                y: -vh - 200,
+                x: (Math.random() - 0.5) * vw * 0.8, // Random horizontal position within 80% of width
+                rotation: Math.random() * 360,
+                scale: 0.8 + Math.random() * 0.4, // Random scale
+                opacity: 0,
+                position: 'absolute',
+                top: vh / 2, // Centered vertically to start
+                left: '50%', // Centered horizontally
+                xPercent: -50,
+                yPercent: -50,
+            });
+        });
+
+        // Create the timeline
+        const tl = gsap.timeline({
+            onComplete: () => {
+                setAnimationComplete(true);
+            }
+        });
+
+        // 1. Rainfall Animation (Staggered drops)
+        tl.to(icons, {
+            y: () => (vh * 0.5) - 100 - (Math.random() * 150), // Landing safely above the bottom of the screen
+            opacity: 1,
+            rotation: () => Math.random() * 360, // Spin while falling
+            duration: 1.5,
+            ease: "bounce.out",
+            stagger: {
+                amount: 2, // Spread the drops over 2 seconds
+                onStart: function () {
+                    // This creates the coin sound as each one starts falling/hits
+                    playCoinSound();
+                }
+            }
+        });
+
+        // 2. Wait 5 seconds
+        tl.to({}, { duration: 5 });
+
+        // 3. Align to Grid
+        // To animate to grid smoothly, we calculate the bounds of the grid cells
+        // Since it's tricky to animate from absolute layout to CSS Grid layout seamlessly,
+        // we'll animate them into a neat formation manually or use Flip (if available).
+        // For simplicity and robust GSAP without Flip plugin: we move them into a central block
+
+        tl.to(icons, {
+            y: 0,
+            x: 0, // Reset transformations as we'll rely on CSS grid positioning eventually
+            rotation: 0,
+            scale: 1,
+            position: 'relative',
+            top: 'auto',
+            left: 'auto',
+            xPercent: 0,
+            yPercent: 0,
+            duration: 0.8,
+            ease: "power3.inOut",
+            stagger: 0.05,
+            clearProps: "all" // Clear absolute positioning to let CSS Grid take over
+        }, "+=0.1");
+
+        return () => {
+            tl.kill(); // Cleanup on unmount
+        };
+    }, [playCoinSound]);
+
     return (
-        <section
-            id="skills"
-            className="min-h-screen w-full flex items-center justify-center pt-[100px] md:pt-[120px] pb-20 px-5 md:px-20 relative z-10 border-t border-white/5 overflow-hidden"
-        >
-            {/* Decorative blobs */}
-            <div className="absolute top-[15%] left-[5%] w-72 h-72 rounded-full border border-[#fd5108]/10 bg-[radial-gradient(circle_at_center,rgba(253,81,8,0.06)_0%,transparent_70%)] animate-[float_7s_ease-in-out_infinite] -z-10 blur-sm pointer-events-none" />
-            <div className="absolute bottom-[10%] right-[8%] w-96 h-96 rounded-full border border-white/5 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.02)_0%,transparent_70%)] animate-[floatReverse_9s_ease-in-out_infinite] -z-10 blur-md pointer-events-none" />
+        <section id="skills" className="relative min-h-screen w-full flex flex-col items-center justify-center pt-32 pb-20 overflow-hidden" ref={containerRef}>
 
-            <div className="max-w-6xl w-full mx-auto flex flex-col items-center">
-
-                {/* Section Header */}
-                <div className="w-full mb-16 flex flex-col lg:flex-row items-start lg:items-end justify-between gap-6 animate-[fadeInUp_1s_ease-out_both]">
-                    <div>
-                        <div className="flex items-center gap-4 mb-4">
-                            <div className="h-[1px] w-16 bg-gradient-to-r from-[#fd5108] to-transparent" />
-                            <span className="text-[#fd5108] text-sm font-semibold uppercase tracking-widest">
-                                Skills
-                            </span>
-                        </div>
-                        <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight">
-                            My Tech <br className="hidden md:block" />
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#fd5108] to-orange-400">
-                                Arsenal.
-                            </span>
-                        </h2>
+            <div className="z-10 w-full max-w-6xl mx-auto px-6 mb-12 relative text-left">
+                <h2 className="text-4xl md:text-5xl font-bold text-white mb-4 tracking-tight">
+                    Technical <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#fd5108] to-[#ff8c00]">Expertise</span>
+                </h2>
+                <p className="text-white/60 text-lg max-w-2xl px-1">
+                    A comprehensive overview of the technologies and tools I've mastered.
+                </p>
+                {/* Visual hint for waiting */}
+                {!animationComplete && (
+                    <div className="absolute left-6 -bottom-8 text-white/40 text-sm animate-pulse whitespace-nowrap">
+                        Organizing... Please wait a few seconds
                     </div>
-                    <p className="text-white/50 max-w-md text-lg font-light leading-relaxed">
-                        A curated look at the tools and technologies I use to bring ideas from concept to code.
-                    </p>
-                </div>
-
-                {/* Skill Cards Grid */}
-                <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {skillCategories.map((category, catIndex) => (
-                        <div
-                            key={category.title}
-                            className="group relative w-full animate-[fadeInUp_0.6s_ease-out_both]"
-                            style={{ animationDelay: `${catIndex * 0.1}s` }}
-                        >
-                            {/* Hover glow */}
-                            <div className="absolute inset-0 bg-gradient-to-br from-[#fd5108]/15 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl blur-xl pointer-events-none" />
-
-                            <div className="relative w-full p-6 rounded-2xl bg-[#050505]/60 border border-white/10 backdrop-blur-md shadow-[0_10px_30px_rgba(0,0,0,0.4)] transition-all duration-300 hover:border-[#fd5108]/40 hover:translate-y-[-4px]">
-                                {/* Card Header */}
-                                <div className="flex items-center gap-3 mb-5">
-                                    <span className="text-2xl">{category.icon}</span>
-                                    <h3 className="text-white text-lg font-bold tracking-wide">
-                                        {category.title}
-                                    </h3>
-                                </div>
-
-                                {/* Skill Bars */}
-                                <div className="flex flex-col gap-4">
-                                    {category.skills.map((skill) => (
-                                        <div key={skill.name}>
-                                            <div className="flex justify-between items-center mb-1.5">
-                                                <span className="text-white/80 text-sm font-medium">
-                                                    {skill.name}
-                                                </span>
-                                                <span className="text-[#fd5108] text-xs font-mono">
-                                                    {skill.level}%
-                                                </span>
-                                            </div>
-                                            <div className="h-[3px] w-full rounded-full bg-white/10">
-                                                <div
-                                                    className="h-full rounded-full bg-gradient-to-r from-[#fd5108] to-orange-400 transition-all duration-700"
-                                                    style={{ width: `${skill.level}%` }}
-                                                />
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
-                    ))}
-                </div>
+                )}
             </div>
+
+            {/* The Categories Layout */}
+            {/* Initially, icons are absolute. Once clearProps hits, they snap into this categorized CSS layout */}
+            <div
+                ref={gridRef}
+                className="relative z-10 w-full max-w-6xl mx-auto px-6 flex flex-col gap-12 sm:gap-16 flex-grow justify-start"
+            >
+                {skillsCategories.map((category, catIndex) => (
+                    <div key={category.title} className="w-full flex flex-col items-start">
+                        {/* Category Heading - fades in when animation is complete */}
+                        <div className={`mb-6 ml-0 transition-all duration-1000 transform ${animationComplete ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+                            <h3 className="text-2xl md:text-3xl font-bold text-white/90 border-b-2 border-[#fd5108]/50 pb-2 inline-block">
+                                {category.title}
+                            </h3>
+                        </div>
+
+                        {/* Category Grid */}
+                        <div className="flex flex-wrap gap-4 sm:gap-8 lg:gap-10 w-full justify-start pl-0">
+                            {category.skills.map((skill, skillIndex) => {
+                                // Calculate global index for the flat ref array
+                                const globalIndex = skillsCategories.slice(0, catIndex).reduce((acc, cat) => acc + cat.skills.length, 0) + skillIndex;
+                                return (
+                                    <div
+                                        key={skill.name}
+                                        ref={(el) => (iconsRef.current[globalIndex] = el)}
+                                        className={`w-[100px] h-[100px] sm:w-[120px] sm:h-[120px] md:w-[130px] md:h-[130px] flex flex-col items-center justify-center p-3 rounded-full bg-gradient-to-br from-white/10 to-[#050505] border-[3px] border-[#fd5108]/40 backdrop-blur-md transition-all duration-300 ${animationComplete ? 'hover:-translate-y-2 hover:border-[#fd5108] hover:shadow-[0_0_30px_rgba(253,81,8,0.5)] group cursor-pointer' : ''} shadow-[inset_0_4px_20px_rgba(255,255,255,0.1)] shrink-0`}
+                                    >
+                                        <div className="w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 flex items-center justify-center mb-1 transition-transform duration-300 group-hover:scale-110">
+                                            <img
+                                                src={skill.icon}
+                                                alt={skill.name}
+                                                className="w-full h-full object-contain filter drop-shadow-[0_0_8px_rgba(255,255,255,0.2)]"
+                                            />
+                                        </div>
+                                        <span className="text-white/90 font-semibold text-[10px] sm:text-xs md:text-sm group-hover:text-white transition-colors duration-300 text-center leading-tight">{skill.name}</span>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </div>
+                ))}
+            </div>
+
+            {/* Background elements (subtle) */}
+            <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#050505] -z-10 pointer-events-none"></div>
         </section>
     );
 };
