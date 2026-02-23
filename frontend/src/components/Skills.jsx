@@ -23,32 +23,32 @@ const skillsCategories = [
     {
         title: "Programming Languages",
         skills: [
-            { name: 'C', icon: cIcon },
-            { name: 'C++', icon: cppIcon },
-            { name: 'Python', icon: pythonIcon },
-            { name: 'Java', icon: javaIcon },
+            { name: 'C', icon: cIcon, usage: "Foundation of computer science concepts, memory management, and system-level programming.", academic: "Used in core data structures and algorithms coursework.", projects: "CLI utilities and low-level system simulations." },
+            { name: 'C++', icon: cppIcon, usage: "Object-oriented programming, competitive programming, and performance-critical applications.", academic: "Advanced algorithms, design patterns, and graphics programming.", projects: "Game engine components and high-performance computation scripts." },
+            { name: 'Python', icon: pythonIcon, usage: "Rapid prototyping, data analysis, machine learning, and backend scripting.", academic: "Used extensively for data science, AI assignments, and automation.", projects: "Scripting, API development with Flask, and data pipelines." },
+            { name: 'Java', icon: javaIcon, usage: "Enterprise application development, Android development, and robust backend services.", academic: "Software engineering principles, OOP design, and enterprise systems.", projects: "Backend services and Android mobile application development." },
         ]
     },
     {
         title: "Fullstack",
         skills: [
-            { name: 'HTML5', icon: htmlIcon },
-            { name: 'CSS3', icon: cssIcon },
-            { name: 'React', icon: reactIcon },
-            { name: 'Node.js', icon: nodeIcon },
-            { name: 'Flask', icon: flaskIcon },
+            { name: 'HTML5', icon: htmlIcon, usage: "Structuring web content with semantic markup and accessibility in mind.", academic: "Web development fundamentals and UI design principles.", projects: "Foundation of all frontend web projects, including portfolio and SaaS landing pages." },
+            { name: 'CSS3', icon: cssIcon, usage: "Styling modern web applications with responsive design, animations, and layouts.", academic: "Advanced styling techniques, CSS Grid, and Flexbox.", projects: "Custom styling for luxury e-commerce platforms and animated dashboards." },
+            { name: 'React', icon: reactIcon, usage: "Building dynamic, component-driven user interfaces and single-page applications.", academic: "Frontend architectures, state management, and modern web frameworks.", projects: "Primary framework for portfolio, educational platforms (PathshalaAI), and e-commerce UI." },
+            { name: 'Node.js', icon: nodeIcon, usage: "Developing scalable network applications and asynchronous backend services.", academic: "Server-side programming, RESTful API design, and asynchronous networking.", projects: "Backend API development, authentication services, and microservices." },
+            { name: 'Flask', icon: flaskIcon, usage: "Creating lightweight, extensible Python web applications and APIs.", academic: "Web backend assignments and micro-service architectures.", projects: "Quick API generation for data-driven projects and ML model serving." },
         ]
     },
     {
         title: "Cloud & DevOps",
         skills: [
-            { name: 'PostgreSQL', icon: postgresIcon },
-            { name: 'Docker', icon: dockerIcon },
-            { name: 'AWS', icon: awsIcon },
-            { name: 'Google Cloud', icon: gcpIcon },
-            { name: 'Git', icon: gitIcon },
-            { name: 'GitHub', icon: githubIcon },
-            { name: 'Figma', icon: figmaIcon }
+            { name: 'PostgreSQL', icon: postgresIcon, usage: "Designing robust, relational database schemas and complex queries.", academic: "Database management systems, normalization, and relational algebra.", projects: "Primary data store for e-commerce user profiles and transaction history." },
+            { name: 'Docker', icon: dockerIcon, usage: "Containerizing applications for consistent deployment across environments.", academic: "Environment virtualization and modern deployment workflows.", projects: "Containerizing web servers and databases for streamlined local development." },
+            { name: 'AWS', icon: awsIcon, usage: "Deploying and scaling applications using robust cloud infrastructure services.", academic: "Cloud computing architectures and distributed systems.", projects: "Hosting web applications, managing S3 buckets, and serverless compute." },
+            { name: 'Google Cloud', icon: gcpIcon, usage: "Leveraging cloud services for hosting, data analytics, and machine learning APIs.", academic: "Cloud provisioning and server management.", projects: "Integrating specialized Google APIs and hosting scalable web applications." },
+            { name: 'Git', icon: gitIcon, usage: "Version control for tracking code changes and collaborating on software projects.", academic: "Team-based software engineering projects.", projects: "Source control for all personal and professional development projects." },
+            { name: 'GitHub', icon: githubIcon, usage: "Hosting code repositories, managing CI/CD pipelines, and open-source contribution.", academic: "Project submissions and peer code reviews.", projects: "Portfolio repository hosting and automated deployment actions." },
+            { name: 'Figma', icon: figmaIcon, usage: "Designing user interfaces, wireframes, and interactive prototypes.", academic: "HCI (Human-Computer Interaction) UI/UX assignments.", projects: "Designing high-fidelity mockups for luxury car stores and EdTech platforms." }
         ]
     }
 ];
@@ -59,8 +59,10 @@ const allSkillsFlat = skillsCategories.flatMap(cat => cat.skills);
 const Skills = () => {
     const containerRef = useRef(null);
     const gridRef = useRef(null);
+    const modalRef = useRef(null);
     const audioCtxRef = useRef(null);
     const [animationComplete, setAnimationComplete] = useState(false);
+    const [selectedSkill, setSelectedSkill] = useState(null);
     const iconsRef = useRef([]);
 
     // Initialize Web Audio API context on first interaction or mount
@@ -109,6 +111,15 @@ const Skills = () => {
     }, []);
 
     useEffect(() => {
+        if (selectedSkill && modalRef.current) {
+            gsap.fromTo(modalRef.current,
+                { opacity: 0, scale: 0.8, rotationY: 45, rotationX: -15, z: -200 },
+                { opacity: 1, scale: 1, rotationY: 0, rotationX: 0, z: 0, duration: 0.8, ease: "back.out(1.2)", transformPerspective: 1500 }
+            );
+        }
+    }, [selectedSkill]);
+
+    useEffect(() => {
         // Wait briefly for refs to populate on first render
         const icons = iconsRef.current.filter(Boolean);
         if (!icons || icons.length === 0) return;
@@ -155,8 +166,8 @@ const Skills = () => {
             stagger: {
                 amount: 2, // Spread the drops over 2 seconds
                 onStart: function () {
-                    // This creates the coin sound as each one starts falling/hits
-                    playCoinSound();
+                    // This creates the coin sound as each one hits the bottom (roughly 1.5s into the 1.5s bounce animation)
+                    gsap.delayedCall(1.5, playCoinSound);
                 }
             }
         });
@@ -233,6 +244,7 @@ const Skills = () => {
                                     <div
                                         key={skill.name}
                                         ref={(el) => (iconsRef.current[globalIndex] = el)}
+                                        onClick={() => animationComplete && setSelectedSkill(skill)}
                                         className={`w-[100px] h-[100px] sm:w-[120px] sm:h-[120px] md:w-[130px] md:h-[130px] flex flex-col items-center justify-center p-3 rounded-full bg-gradient-to-br from-white/10 to-[#050505] border-[3px] border-[#fd5108]/40 backdrop-blur-md transition-all duration-300 ${animationComplete ? 'hover:-translate-y-2 hover:border-[#fd5108] hover:shadow-[0_0_30px_rgba(253,81,8,0.5)] group cursor-pointer' : ''} shadow-[inset_0_4px_20px_rgba(255,255,255,0.1)] shrink-0`}
                                     >
                                         <div className="w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 flex items-center justify-center mb-1 transition-transform duration-300 group-hover:scale-110">
@@ -253,6 +265,73 @@ const Skills = () => {
 
             {/* Background elements (subtle) */}
             <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#050505] -z-10 pointer-events-none"></div>
+
+            {/* 3D Skill Detail Modal */}
+            {selectedSkill && (
+                <div
+                    className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-[#050505]/80 backdrop-blur-md"
+                    onClick={() => setSelectedSkill(null)}
+                >
+                    <div
+                        ref={modalRef}
+                        className="relative w-full max-w-4xl bg-gradient-to-br from-white/10 to-transparent border border-white/20 rounded-3xl p-6 sm:p-10 flex flex-col md:flex-row gap-8 items-center justify-center shadow-[0_0_50px_rgba(0,0,0,0.8)] overflow-hidden"
+                        onClick={(e) => e.stopPropagation()}
+                        style={{ transformStyle: 'preserve-3d' }}
+                    >
+                        {/* Inner glowing accent */}
+                        <div className="absolute inset-0 bg-gradient-to-r from-[#fd5108]/10 to-transparent opacity-50 pointer-events-none"></div>
+
+                        {/* Close button */}
+                        <button
+                            onClick={() => setSelectedSkill(null)}
+                            className="absolute z-20 top-4 right-4 text-white/50 hover:text-white transition-colors p-2 bg-black/20 hover:bg-black/40 rounded-full"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+
+                        {/* Left Side: 3D Glowing Icon */}
+                        <div className="flex-shrink-0 relative w-40 h-40 sm:w-56 sm:h-56 flex items-center justify-center ml-0 md:-ml-4 z-10" style={{ transform: 'translateZ(50px)' }}>
+                            <div className="absolute inset-0 bg-[#fd5108]/30 rounded-full blur-[60px] animate-pulse"></div>
+                            <img
+                                src={selectedSkill.icon}
+                                alt={selectedSkill.name}
+                                className="relative w-full h-full object-contain filter drop-shadow-[0_0_20px_rgba(253,81,8,0.5)] transform hover:scale-110 hover:rotate-[15deg] transition-all duration-500 ease-out"
+                            />
+                        </div>
+
+                        {/* Right Side: Tech Readout Panel */}
+                        <div className="flex-1 flex flex-col gap-5 text-left w-full z-10" style={{ transform: 'translateZ(30px)' }}>
+                            <div className="border-b border-white/10 pb-4">
+                                <h3 className="text-3xl sm:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-br from-white to-white/60 tracking-tight">
+                                    {selectedSkill.name}
+                                </h3>
+                                <div className="text-[#fd5108] text-sm font-mono mt-3 flex items-center gap-2 bg-black/30 w-fit px-3 py-1.5 rounded-md border border-[#fd5108]/30">
+                                    <span className="w-2 h-2 rounded-full bg-[#fd5108] animate-pulse"></span>
+                                    TECH_PROFILE_ACTIVE
+                                </div>
+                            </div>
+
+                            <div className="space-y-3 mt-2">
+                                <div className="bg-black/40 border border-white/5 rounded-xl p-4 transition-colors">
+                                    <h4 className="text-white/40 text-[11px] font-mono mb-1.5 uppercase tracking-widest">// Core Usage</h4>
+                                    <p className="text-white/80 text-sm sm:text-base leading-relaxed">{selectedSkill.usage}</p>
+                                </div>
+                                <div className="bg-black/40 border border-white/5 rounded-xl p-4 transition-colors">
+                                    <h4 className="text-white/40 text-[11px] font-mono mb-1.5 uppercase tracking-widest">// Academic Integration</h4>
+                                    <p className="text-white/80 text-sm sm:text-base leading-relaxed">{selectedSkill.academic}</p>
+                                </div>
+                                <div className="bg-[#fd5108]/10 border border-[#fd5108]/30 rounded-xl p-4 relative overflow-hidden">
+                                    <div className="absolute top-0 left-0 w-1 h-full bg-[#fd5108]"></div>
+                                    <h4 className="text-[#fd5108]/80 text-[11px] font-mono mb-1.5 uppercase tracking-widest">// Project Deployments</h4>
+                                    <p className="text-white text-sm sm:text-base leading-relaxed">{selectedSkill.projects}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </section>
     );
 };
