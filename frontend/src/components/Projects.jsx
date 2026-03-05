@@ -45,6 +45,36 @@ const projectsData = [
         github: "https://github.com/prv05/Hospital-management-system",
         image: "https://images.unsplash.com/photo-1538108149393-cebb47caa858?q=80&w=1000&auto=format&fit=crop",
         status: "Completed"
+    },
+    {
+        id: 5,
+        title: "SmartPass",
+        description: "An intelligent crowd safety and stampede prevention system utilizing sensors and real-time monitoring to ensure public security at large gatherings.",
+        techStack: ["C++", "IoT", "Systems Design"],
+        link: "https://github.com/prv05/smartpass",
+        github: "https://github.com/prv05/smartpass",
+        image: "https://images.unsplash.com/photo-1541888086425-d81bb19240f5?q=80&w=1000&auto=format&fit=crop",
+        status: "Completed"
+    },
+    {
+        id: 6,
+        title: "SkillSpeakAI",
+        description: "An AI-powered interactive platform tailored to provide comprehensive interview and exam preparation for students and professionals.",
+        techStack: ["HTML", "JavaScript", "AI Integration"],
+        link: "https://github.com/prv05/SkillspeakAI",
+        github: "https://github.com/prv05/SkillspeakAI",
+        image: "https://images.unsplash.com/photo-1573164713988-8665fc963095?q=80&w=1000&auto=format&fit=crop",
+        status: "Completed"
+    },
+    {
+        id: 7,
+        title: "AI-Powered Resume Builder",
+        description: "A smart application that leverages AI to help users seamlessly generate, format, and optimize professional resumes to stand out to recruiters.",
+        techStack: ["EJS", "Node.js", "Express", "OpenAI API"],
+        link: "https://github.com/prv05/AI-Powered-Resume-Builder",
+        github: "https://github.com/prv05/AI-Powered-Resume-Builder",
+        image: "https://images.unsplash.com/photo-1586281380349-632531db7ed4?q=80&w=1000&auto=format&fit=crop",
+        status: "Completed"
     }
 ];
 
