@@ -1,10 +1,55 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import aiAvatar from '../assets/ai assitant.png';
 
 const Chat = () => {
-    const [messages, setMessages] = useState([
-        { role: 'ai', content: 'Hi there! I am Pratham\'s AI Assistant. You can ask me anything about his skills, experience, projects, or how to get in touch!' }
-    ]);
+    const [messages, setMessages] = useState(() => {
+        const savedMessages = localStorage.getItem('pratChatHistory');
+        if (savedMessages) {
+            return JSON.parse(savedMessages);
+        }
+        return [
+            { role: 'ai', content: 'Welcome! I am PRAT (Portfolio Response & Assistance Tool). You can ask me anything about Pratham\'s skills, experience, projects, or how to get in touch!' }
+        ];
+    });
     const [input, setInput] = useState('');
+    const [isSpeaking, setIsSpeaking] = useState(false);
+    const messagesEndRef = useRef(null);
+
+    const scrollToBottom = () => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    };
+
+    useEffect(() => {
+        scrollToBottom();
+        // Save to local storage whenever messages change
+        localStorage.setItem('pratChatHistory', JSON.stringify(messages));
+    }, [messages]);
+
+    const speak = (text) => {
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+
+            utterance.onstart = () => setIsSpeaking(true);
+            utterance.onend = () => setIsSpeaking(false);
+            utterance.onerror = () => setIsSpeaking(false);
+            window.speechSynthesis.speak(utterance);
+        }
+    };
+
+    useEffect(() => {
+        // Only say welcome when user first opens chat page and there is no history
+        if (messages.length <= 1) {
+            const welcomeText = "Welcome! I am PRAT, the Portfolio Response and Assistance Tool. You can ask me anything about Pratham's skills, experience, projects, or how to get in touch!";
+            speak(welcomeText);
+        }
+
+        return () => {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+            }
+        };
+    }, []);
 
     const handleSend = (e) => {
         e.preventDefault();
@@ -26,6 +71,7 @@ const Chat = () => {
             }
 
             setMessages(prev => [...prev, { role: 'ai', content: aiMsg }]);
+            speak(aiMsg);
         }, 1000);
     };
 
@@ -35,16 +81,26 @@ const Chat = () => {
 
                 {/* Header */}
                 <div className="p-5 border-b border-white/10 bg-white/[0.02] flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-[#fd5108] to-orange-500 p-[2px]">
-                        <div className="w-full h-full bg-[#050505] rounded-full flex items-center justify-center">
-                            <span className="text-[#fd5108] font-bold text-lg">AI</span>
+                    <div className={`w-12 h-12 rounded-full bg-gradient-to-tr from-[#fd5108] to-orange-500 p-[2px] shrink-0 transition-all duration-300 ${isSpeaking ? 'shadow-[0_0_20px_rgba(253,81,8,0.8)] scale-110' : ''}`}>
+                        <div className="w-full h-full bg-[#050505] rounded-full flex items-center justify-center relative overflow-hidden">
+                            <img src={aiAvatar} alt="PRAT Avatar" className="w-full h-full object-cover" />
+                            {isSpeaking && (
+                                <div className="absolute inset-0 bg-black/60 backdrop-blur-[1px] flex items-center justify-center gap-[3px]">
+                                    <div className="w-1 h-3 bg-[#fd5108] animate-[bounce_1s_infinite] rounded-full"></div>
+                                    <div className="w-1 h-5 bg-[#fd5108] animate-[bounce_1.2s_infinite_0.1s] rounded-full"></div>
+                                    <div className="w-1 h-3 bg-[#fd5108] animate-[bounce_1s_infinite_0.2s] rounded-full"></div>
+                                </div>
+                            )}
                         </div>
                     </div>
                     <div>
-                        <h2 className="text-white font-semibold text-xl">Pratham's AI Assistant</h2>
-                        <p className="text-white/50 text-xs flex items-center gap-1">
-                            <span className="w-2 h-2 rounded-full bg-green-500 box-content"></span>
-                            Online
+                        <h2 className="text-white font-semibold text-xl flex items-center gap-2">
+                            PRAT
+                            <span className="text-white/30 text-[10px] hidden md:inline font-normal tracking-wider uppercase bg-white/5 px-2 py-0.5 rounded-full border border-white/10">Portfolio Response & Assistance Tool</span>
+                        </h2>
+                        <p className="text-white/50 text-xs flex items-center gap-1 mt-0.5">
+                            <span className={`w-2 h-2 rounded-full box-content ${isSpeaking ? 'bg-[#fd5108] animate-pulse' : 'bg-green-500'}`}></span>
+                            {isSpeaking ? 'Speaking...' : 'Online'}
                         </p>
                     </div>
                 </div>
@@ -54,18 +110,33 @@ const Chat = () => {
                     {messages.map((msg, idx) => (
                         <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                             <div className={`max-w-[75%] p-4 rounded-2xl text-sm ${msg.role === 'user'
-                                    ? 'bg-[#fd5108] text-white rounded-tr-sm'
-                                    : 'bg-white/10 text-white/90 rounded-tl-sm border border-white/5'
+                                ? 'bg-[#fd5108] text-white rounded-tr-sm'
+                                : 'bg-white/10 text-white/90 rounded-tl-sm border border-white/5'
                                 }`}>
                                 {msg.content}
                             </div>
                         </div>
                     ))}
+                    <div ref={messagesEndRef} />
                 </div>
 
                 {/* Input Area */}
                 <div className="p-4 border-t border-white/10 bg-black/40">
                     <form onSubmit={handleSend} className="flex items-center gap-3">
+                        <button
+                            type="button"
+                            onClick={() => {
+                                localStorage.removeItem('pratChatHistory');
+                                setMessages([{ role: 'ai', content: 'Welcome! I am PRAT (Portfolio Response & Assistance Tool). You can ask me anything about Pratham\'s skills, experience, projects, or how to get in touch!' }]);
+                                speak("Chat history cleared. How can I help you?");
+                            }}
+                            title="Clear Chat History"
+                            className="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/50 hover:bg-white/10 hover:text-white transition-colors"
+                        >
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-5 h-5">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                            </svg>
+                        </button>
                         <input
                             type="text"
                             value={input}
@@ -76,7 +147,7 @@ const Chat = () => {
                         <button
                             type="submit"
                             disabled={!input.trim()}
-                            className="w-12 h-12 rounded-full bg-[#fd5108] flex items-center justify-center text-white hover:bg-orange-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="w-12 h-12 rounded-full bg-[#fd5108] flex items-center justify-center text-white hover:bg-orange-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
                         >
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-5 h-5 ml-1">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />

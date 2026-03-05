@@ -7,6 +7,7 @@ import Experience from './components/Experience'
 import Connect from './components/Connect'
 import Skills from './components/Skills'
 import Resume from './components/Resume'
+import Projects from './components/Projects'
 import Chat from './components/Chat'
 import AIFloatingIcon from './components/AIFloatingIcon'
 
@@ -23,6 +24,7 @@ function App() {
           <Route path="/experience" element={<Experience />} />
           <Route path="/connect" element={<Connect />} />
           <Route path="/skills" element={<Skills />} />
+          <Route path="/projects" element={<Projects />} />
           <Route path="/resume" element={<Resume />} />
           <Route path="/chat" element={<Chat />} />
         </Routes>

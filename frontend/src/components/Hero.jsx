@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Typewriter } from 'react-simple-typewriter';
 import mailIcon from '../assets/mail.png';
 import boltIcon from '../assets/bolt.png';
@@ -52,9 +53,11 @@ const Hero = () => {
                     </p>
 
                     <div className="flex items-center gap-5 mt-3">
-                        <button className="bg-[#fd5108]/20 text-white px-8 py-3 rounded-full font-medium text-lg backdrop-blur-xl border border-[#fd5108]/50 hover:bg-[#fd5108] hover:border-transparent transition-all duration-300 shadow-[0_0_30px_rgba(253,81,8,0.2)] hover:shadow-[0_0_40px_rgba(253,81,8,0.6)]">
-                            Hire me
-                        </button>
+                        <Link to="/projects">
+                            <button className="bg-[#fd5108]/20 text-white px-8 py-3 rounded-full font-medium text-lg backdrop-blur-xl border border-[#fd5108]/50 hover:bg-[#fd5108] hover:border-transparent transition-all duration-300 shadow-[0_0_30px_rgba(253,81,8,0.2)] hover:shadow-[0_0_40px_rgba(253,81,8,0.6)]">
+                                Projects
+                            </button>
+                        </Link>
                         <button className="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center hover:bg-white/10 transition-colors">
                             <img src={mailIcon} alt="Mail" className="w-5 h-5 invert opacity-80" />
                         </button>
