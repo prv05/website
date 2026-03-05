@@ -8,39 +8,43 @@ gsap.registerPlugin(ScrollTrigger);
 const projectsData = [
     {
         id: 1,
-        title: "Pathshala AI - EdTech Platform",
-        description: "A comprehensive EdTech platform leveraging AI to provide personalized learning paths, interactive modules, and performance analytics for students.",
-        techStack: ["React", "Node.js", "Express", "MongoDB", "OpenAI API", "TailwindCSS"],
-        link: "#", // Placeholder
-        github: "#", // Placeholder
-        image: "https://images.unsplash.com/photo-1501504905252-473c47e087f8?q=80&w=1000&auto=format&fit=crop" // Placeholder image
+        title: "PathShalaAI",
+        description: "An AI-powered EdTech platform providing personalized learning paths, interactive modules, and comprehensive performance analytics for students.",
+        techStack: ["React", "Node.js", "Express", "MongoDB", "AI Integration"],
+        link: "#", // In progress, no live link yet
+        github: "https://github.com/prv05/PathShalaAI",
+        image: "https://images.unsplash.com/photo-1501504905252-473c47e087f8?q=80&w=1000&auto=format&fit=crop",
+        status: "In Progress"
     },
     {
         id: 2,
-        title: "Automotive E-Commerce Store",
-        description: "A luxury automotive e-commerce platform offering 3D car visualizations, custom configuration tools, and secure payment processing.",
-        techStack: ["React Three Fiber", "TailwindCSS", "Node.js", "PostgreSQL", "Stripe"],
-        link: "#",
-        github: "#",
-        image: "https://images.unsplash.com/photo-1560958089-b8a1929cea89?q=80&w=1000&auto=format&fit=crop"
+        title: "VyapariAI",
+        description: "An AI-driven business assistant designed to help small businesses automate support, generate insights, and seamlessly manage operations.",
+        techStack: ["React", "Python", "Flask", "Machine Learning", "NLP"],
+        link: "#", // In progress, no live link yet
+        github: "https://github.com/prv05/VyapariAI",
+        image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1000&auto=format&fit=crop",
+        status: "In Progress"
     },
     {
         id: 3,
-        title: "VyapariAI - Business Assistant",
-        description: "An AI-driven business assistant designed to automate customer support, generate sales insights, and manage inventory for small businesses.",
-        techStack: ["Python", "Flask", "React", "ChromaDB", "LangChain"],
-        link: "#",
-        github: "#",
-        image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1000&auto=format&fit=crop"
+        title: "Automotive E-Commerce Website",
+        description: "A luxury automotive e-commerce platform offering 3D car visualizations, custom configuration tools, and secure payment processing.",
+        techStack: ["JavaScript", "HTML", "CSS", "3D Rendering"],
+        link: "https://github.com/prv05/Automotive-E-commerce-Website",
+        github: "https://github.com/prv05/Automotive-E-commerce-Website",
+        image: "https://images.unsplash.com/photo-1560958089-b8a1929cea89?q=80&w=1000&auto=format&fit=crop",
+        status: "Completed"
     },
     {
         id: 4,
-        title: "DeFi Smart Contract Platform",
-        description: "A decentralized finance application allowing users to stake tokens, farm yields, and participate in decentralized governance.",
-        techStack: ["Solidity", "Hardhat", "Ethers.js", "React", "Web3"],
-        link: "#",
-        github: "#",
-        image: "https://images.unsplash.com/photo-1639762681485-074b7f938ba0?q=80&w=1000&auto=format&fit=crop"
+        title: "Hospital Management System",
+        description: "A comprehensive digital solution for streamlining hospital operations, patient records, appointment scheduling, and staff management.",
+        techStack: ["JavaScript", "Node.js", "Express", "Database"],
+        link: "https://github.com/prv05/Hospital-management-system",
+        github: "https://github.com/prv05/Hospital-management-system",
+        image: "https://images.unsplash.com/photo-1538108149393-cebb47caa858?q=80&w=1000&auto=format&fit=crop",
+        status: "Completed"
     }
 ];
 
@@ -189,13 +193,15 @@ const Projects = () => {
                                             className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out"
                                         />
 
-                                        {/* Overlay quick links on hover (optional) */}
+                                        {/* Overlay quick links on hover */}
                                         <div className="absolute inset-0 z-20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                            <a href={project.link} target="_blank" rel="noopener noreferrer" className="mx-2 p-3 bg-white/10 backdrop-blur-md rounded-full border border-white/20 hover:bg-[#fd5108] hover:border-transparent transition-all shadow-lg transform translate-y-4 group-hover:translate-y-0 duration-300 delay-100">
-                                                <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                                                </svg>
-                                            </a>
+                                            {project.link !== "#" && (
+                                                <a href={project.link} target="_blank" rel="noopener noreferrer" className="mx-2 p-3 bg-white/10 backdrop-blur-md rounded-full border border-white/20 hover:bg-[#fd5108] hover:border-transparent transition-all shadow-lg transform translate-y-4 group-hover:translate-y-0 duration-300 delay-100">
+                                                    <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                                    </svg>
+                                                </a>
+                                            )}
                                             <a href={project.github} target="_blank" rel="noopener noreferrer" className="mx-2 p-3 bg-white/10 backdrop-blur-md rounded-full border border-white/20 hover:bg-white/20 transition-all shadow-lg transform translate-y-4 group-hover:translate-y-0 duration-300 delay-150">
                                                 <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
                                                     <path fillRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clipRule="evenodd" />
@@ -210,8 +216,13 @@ const Projects = () => {
                                     ref={(el) => cardRefs.current[index * 2 + 1] = el}
                                     className={`w-full md:w-1/2 flex flex-col ${isEven ? 'md:items-start md:text-left' : 'md:items-end md:text-right'} pl-6 md:pl-0`}
                                 >
-                                    <h3 className="text-2xl md:text-4xl font-bold text-white mb-4 hover:text-[#fd5108] transition-colors duration-300">
+                                    <h3 className="text-2xl md:text-4xl font-bold text-white mb-2 hover:text-[#fd5108] transition-colors duration-300 flex items-center gap-3 flex-wrap">
                                         {project.title}
+                                        {project.status === "In Progress" && (
+                                            <span className="text-[10px] uppercase tracking-wider font-semibold px-2 py-1 rounded bg-[#fd5108]/20 text-[#fd5108] border border-[#fd5108]/30">
+                                                In Progress
+                                            </span>
+                                        )}
                                     </h3>
                                     <div className="bg-white/5 backdrop-blur-md border border-white/10 p-6 rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.5)] z-20 mb-6 w-full lg:w-[110%] relative">
                                         <p className="text-white/80 text-base md:text-lg leading-relaxed">
