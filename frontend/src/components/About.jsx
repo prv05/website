@@ -101,11 +101,11 @@ const About = () => {
                         {/* Stats Cards */}
                         <div className="flex flex-col sm:flex-row gap-5 mt-4">
                             <div className="p-6 rounded-2xl bg-[#050505]/50 border border-white/5 backdrop-blur-sm flex-1 transition-all duration-300 hover:border-[#fd5108]/30 hover:bg-white/5 hover:translate-y-[-5px]">
-                                <h4 className="text-4xl font-bold text-white mb-2">3+</h4>
-                                <p className="text-white/40 text-sm uppercase tracking-wider font-medium">Years Experience</p>
+                                <h4 className="text-4xl font-bold text-white mb-2">7+</h4>
+                                <p className="text-white/40 text-sm uppercase tracking-wider font-medium">Months Experience</p>
                             </div>
                             <div className="p-6 rounded-2xl bg-[#050505]/50 border border-white/5 backdrop-blur-sm flex-1 transition-all duration-300 hover:border-[#fd5108]/30 hover:bg-white/5 hover:translate-y-[-5px]">
-                                <h4 className="text-4xl font-bold text-white mb-2">20+</h4>
+                                <h4 className="text-4xl font-bold text-white mb-2">5+</h4>
                                 <p className="text-white/40 text-sm uppercase tracking-wider font-medium">Projects Completed</p>
                             </div>
                         </div>
