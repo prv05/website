@@ -43,23 +43,23 @@ const skillsCategories = [
     {
         title: "Programming Languages",
         skills: [
-            { name: 'C', icon: cIcon, usage: "Foundation of computer science concepts, memory management, and system-level programming.", academic: "Used in core data structures and algorithms coursework.", projects: "CLI utilities and low-level system simulations." },
-            { name: 'C++', icon: cppIcon, usage: "Object-oriented programming, competitive programming, and performance-critical applications.", academic: "Advanced algorithms, design patterns, and graphics programming.", projects: "Game engine components and high-performance computation scripts." },
-            { name: 'Python', icon: pythonIcon, usage: "Rapid prototyping, data analysis, machine learning, and backend scripting.", academic: "Used extensively for data science, AI assignments, and automation.", projects: "Scripting, API development with Flask, and data pipelines." },
+            { name: 'C', icon: cIcon, usage: "Foundation of computer science concepts, memory management, and system-level programming.", academic: "Used in core data structures and algorithms coursework.", projects: "CLI utilities and low-level system simulations including hardware interfaces like SmartPass." },
+            { name: 'C++', icon: cppIcon, usage: "Object-oriented programming, competitive programming, and performance-critical applications.", academic: "Advanced algorithms, design patterns, and graphics programming.", projects: "IoT firmware for SmartPass, game engine components, and high-performance computation scripts." },
+            { name: 'Python', icon: pythonIcon, usage: "Rapid prototyping, data analysis, machine learning, and backend scripting.", academic: "Used extensively for data science, AI assignments, and automation.", projects: "AI pipelines, VyapariAI, SkillSpeakAI, and Flask API development." },
             { name: 'Java', icon: javaIcon, usage: "Enterprise application development, Android development, and robust backend services.", academic: "Software engineering principles, OOP design, and enterprise systems.", projects: "Backend services and Android mobile application development." },
-            { name: 'JavaScript', icon: jsIcon, usage: "Adding interactivity and dynamic behavior to web applications.", academic: "Web programming and interactive systems.", projects: "Frontend logic, DOM manipulation, and asynchronous data fetching." },
+            { name: 'JavaScript', icon: jsIcon, usage: "Adding interactivity and dynamic behavior to web applications.", academic: "Web programming and interactive systems.", projects: "Frontend logic for Automotive E-commerce, SmartPass UI, Hospital Management System, and asynchronous data fetching." },
         ]
     },
     {
         title: "Fullstack",
         skills: [
-            { name: 'HTML5', icon: htmlIcon, usage: "Structuring web content with semantic markup and accessibility in mind.", academic: "Web development fundamentals and UI design principles.", projects: "Foundation of all frontend web projects, including portfolio and SaaS landing pages." },
-            { name: 'CSS3', icon: cssIcon, usage: "Styling modern web applications with responsive design, animations, and layouts.", academic: "Advanced styling techniques, CSS Grid, and Flexbox.", projects: "Custom styling for luxury e-commerce platforms and animated dashboards." },
-            { name: 'React', icon: reactIcon, usage: "Building dynamic, component-driven user interfaces and single-page applications.", academic: "Frontend architectures, state management, and modern web frameworks.", projects: "Primary framework for portfolio, educational platforms (PathshalaAI), and e-commerce UI." },
-            { name: 'Node.js', icon: nodeIcon, usage: "Developing scalable network applications and asynchronous backend services.", academic: "Server-side programming, RESTful API design, and asynchronous networking.", projects: "Backend API development, authentication services, and microservices." },
-            { name: 'Express', icon: expressIcon, usage: "Building robust backend APIs and web server infrastructure routing.", academic: "Web server development and API design.", projects: "Building the backbone for custom web applications and microservices." },
-            { name: 'Flask', icon: flaskIcon, usage: "Creating lightweight, extensible Python web applications and APIs.", academic: "Web backend assignments and micro-service architectures.", projects: "Quick API generation for data-driven projects and ML model serving." },
-            { name: 'Tailwind CSS', icon: tailwindIcon, usage: "Rapid UI development using utility-first CSS classes.", academic: "Modern frontend tooling and rapid prototyping.", projects: "Efficiently styling responsive web applications and dashboards." },
+            { name: 'HTML5', icon: htmlIcon, usage: "Structuring web content with semantic markup and accessibility in mind.", academic: "Web development fundamentals and UI design principles.", projects: "Foundation of all frontend web projects, including portfolio, SkillSpeakAI, Automotive E-commerce, and SmartPass dashboards." },
+            { name: 'CSS3', icon: cssIcon, usage: "Styling modern web applications with responsive design, animations, and layouts.", academic: "Advanced styling techniques, CSS Grid, and Flexbox.", projects: "Custom styling for Automotive E-commerce, SmartPass, and animated dashboards." },
+            { name: 'React', icon: reactIcon, usage: "Building dynamic, component-driven user interfaces and single-page applications.", academic: "Frontend architectures, state management, and modern web frameworks.", projects: "Primary framework for portfolio, educational platforms (PathshalaAI), Hospital Management System, Automotive E-commerce, and VyapariAI." },
+            { name: 'Node.js', icon: nodeIcon, usage: "Developing scalable network applications and asynchronous backend services.", academic: "Server-side programming, RESTful API design, and asynchronous networking.", projects: "Backend API development for Hospital Management System, authentication services, and microservices." },
+            { name: 'Express', icon: expressIcon, usage: "Building robust backend APIs and web server infrastructure routing.", academic: "Web server development and API design.", projects: "Building the backbone for custom web applications like Hospital Management System." },
+            { name: 'Flask', icon: flaskIcon, usage: "Creating lightweight, extensible Python web applications and APIs.", academic: "Web backend assignments and micro-service architectures.", projects: "Backend services for SkillSpeakAI, VyapariAI, and ML model serving." },
+            { name: 'Tailwind CSS', icon: tailwindIcon, usage: "Rapid UI development using utility-first CSS classes.", academic: "Modern frontend tooling and rapid prototyping.", projects: "Efficiently styling responsive web applications and dashboards like the Hospital Management System." },
             { name: 'Bootstrap', icon: bootstrapIcon, usage: "Developing responsive, mobile-first web pages quickly.", academic: "Introduction to CSS frameworks and grid systems.", projects: "Rapid prototyping and building grid-based layouts." },
         ]
     },
@@ -69,7 +69,7 @@ const skillsCategories = [
             { name: 'PostgreSQL', icon: postgresIcon, usage: "Designing robust, relational database schemas and complex queries.", academic: "Database management systems, normalization, and relational algebra.", projects: "Primary data store for e-commerce user profiles and transaction history." },
             { name: 'MySQL', icon: mysqlIcon, usage: "Managing relational databases for web applications.", academic: "Introduction to SQL and relational database design.", projects: "Backend data storage and structured querying." },
             { name: 'Docker', icon: dockerIcon, usage: "Containerizing applications for consistent deployment across environments.", academic: "Environment virtualization and modern deployment workflows.", projects: "Containerizing web servers and databases for streamlined local development." },
-            { name: 'AWS', icon: awsIcon, usage: "Deploying and scaling applications using robust cloud infrastructure services.", academic: "Cloud computing architectures and distributed systems.", projects: "Hosting web applications, managing S3 buckets, and serverless compute." },
+            { name: 'AWS', icon: awsIcon, usage: "Deploying and scaling applications using robust cloud infrastructure services.", academic: "Cloud computing architectures and distributed systems.", projects: "Hosting web applications, running VyapariAI (Lambda, Cognito, DynamoDB, Bedrock, etc.), and serverless compute." },
             { name: 'Google Cloud', icon: gcpIcon, usage: "Leveraging cloud services for hosting, data analytics, and machine learning APIs.", academic: "Cloud provisioning and server management.", projects: "Integrating specialized Google APIs and hosting scalable web applications." },
             { name: 'Linux', icon: linuxIcon, usage: "Operating system management, shell scripting, and server administration.", academic: "Operating systems concepts and command-line proficiency.", projects: "Server deployment environments and system administration." },
             { name: 'RabbitMQ', icon: rabbitmqIcon, usage: "Message queuing for building decoupled, distributed systems.", academic: "Distributed systems and message-oriented middleware.", projects: "Handling asynchronous tasks and inter-service communication." },
@@ -93,7 +93,7 @@ const skillsCategories = [
     {
         title: "Hardware & IoT",
         skills: [
-            { name: 'Arduino', icon: arduinoIcon, usage: "Prototyping microcontroller-based hardware projects.", academic: "Embedded systems and basic electronics.", projects: "Sensor integration and simple automation controllers." },
+            { name: 'Arduino', icon: arduinoIcon, usage: "Prototyping microcontroller-based hardware projects.", academic: "Embedded systems and basic electronics.", projects: "Sensor integration and automation controllers like the ESP32-based SmartPass." },
             { name: 'Raspberry Pi', icon: raspberryPiIcon, usage: "Building single-board computer applications and home servers.", academic: "Internet of Things (IoT) networking and embedded Linux.", projects: "Self-hosted services and IoT gateway prototypes." },
         ]
     },

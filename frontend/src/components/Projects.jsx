@@ -2,6 +2,12 @@ import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
+import resumeImg from '../assets/AI-resume -builder.png';
+import autoImg from '../assets/Automotive-E-commerce.png';
+import hospitalImg from '../assets/Hospital manegment System.png';
+import skillspeakImg from '../assets/skillspeakAI.png';
+import smartpassImg from '../assets/smartpass.jpg';
+
 // Register ScrollTrigger with GSAP
 gsap.registerPlugin(ScrollTrigger);
 
@@ -20,7 +26,7 @@ const projectsData = [
         id: 2,
         title: "VyapariAI",
         description: "An AI-driven business assistant designed to help small businesses automate support, generate insights, and seamlessly manage operations.",
-        techStack: ["React", "Python", "Flask", "Machine Learning", "NLP"],
+        techStack: ["React Native", "AWS Lambda", "Cognito", "DynamoDB", "Amazon Bedrock", "Amazon Transcribe", "Amazon Textract", "Amazon Forecast", "QuickSight"],
         link: "#", // In progress, no live link yet
         github: "https://github.com/prv05/VyapariAI",
         image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1000&auto=format&fit=crop",
@@ -30,50 +36,50 @@ const projectsData = [
         id: 3,
         title: "Automotive E-Commerce Website",
         description: "A luxury automotive e-commerce platform offering 3D car visualizations, custom configuration tools, and secure payment processing.",
-        techStack: ["JavaScript", "HTML", "CSS", "3D Rendering"],
+        techStack: ["React", "JavaScript", "HTML", "CSS", "3D Rendering"],
         link: "https://github.com/prv05/Automotive-E-commerce-Website",
         github: "https://github.com/prv05/Automotive-E-commerce-Website",
-        image: "https://images.unsplash.com/photo-1560958089-b8a1929cea89?q=80&w=1000&auto=format&fit=crop",
+        image: autoImg,
         status: "Completed"
     },
     {
         id: 4,
         title: "Hospital Management System",
         description: "A comprehensive digital solution for streamlining hospital operations, patient records, appointment scheduling, and staff management.",
-        techStack: ["JavaScript", "Node.js", "Express", "Database"],
+        techStack: ["React", "Node.js", "Express.js", "MongoDB", "TailwindCSS", "Zustand", "Chart.js", "JWT"],
         link: "https://github.com/prv05/Hospital-management-system",
         github: "https://github.com/prv05/Hospital-management-system",
-        image: "https://images.unsplash.com/photo-1538108149393-cebb47caa858?q=80&w=1000&auto=format&fit=crop",
+        image: hospitalImg,
         status: "Completed"
     },
     {
         id: 5,
         title: "SmartPass",
         description: "An intelligent crowd safety and stampede prevention system utilizing sensors and real-time monitoring to ensure public security at large gatherings.",
-        techStack: ["C++", "IoT", "Systems Design"],
+        techStack: ["ESP32", "C/C++", "APDS9960", "MPU6050", "BMP180", "SSD1306", "HTML/CSS/JS", "Chart.js"],
         link: "https://github.com/prv05/smartpass",
         github: "https://github.com/prv05/smartpass",
-        image: "https://images.unsplash.com/photo-1541888086425-d81bb19240f5?q=80&w=1000&auto=format&fit=crop",
+        image: smartpassImg,
         status: "Completed"
     },
     {
         id: 6,
         title: "SkillSpeakAI",
         description: "An AI-powered interactive platform tailored to provide comprehensive interview and exam preparation for students and professionals.",
-        techStack: ["HTML", "JavaScript", "AI Integration"],
+        techStack: ["Flask", "MongoDB", "Ollama", "SpeechRecognition", "OpenAI Whisper", "HTML/CSS/JS"],
         link: "https://github.com/prv05/SkillspeakAI",
         github: "https://github.com/prv05/SkillspeakAI",
-        image: "https://images.unsplash.com/photo-1573164713988-8665fc963095?q=80&w=1000&auto=format&fit=crop",
+        image: skillspeakImg,
         status: "Completed"
     },
     {
         id: 7,
         title: "AI-Powered Resume Builder",
         description: "A smart application that leverages AI to help users seamlessly generate, format, and optimize professional resumes to stand out to recruiters.",
-        techStack: ["EJS", "Node.js", "Express", "OpenAI API"],
+        techStack: ["Node.js", "Express", "MongoDB", "JWT", "Together AI", "Puppeteer", "EJS", "HTML/CSS"],
         link: "https://github.com/prv05/AI-Powered-Resume-Builder",
         github: "https://github.com/prv05/AI-Powered-Resume-Builder",
-        image: "https://images.unsplash.com/photo-1586281380349-632531db7ed4?q=80&w=1000&auto=format&fit=crop",
+        image: resumeImg,
         status: "Completed"
     }
 ];

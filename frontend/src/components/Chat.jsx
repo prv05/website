@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
+import ReactMarkdown from 'react-markdown';
 import aiAvatar from '../assets/ai assitant.png';
+import { checkRateLimit } from '../utils/rateLimiter';
 
 const Chat = () => {
     const [messages, setMessages] = useState(() => {
@@ -14,6 +16,7 @@ const Chat = () => {
     const [input, setInput] = useState('');
     const [isSpeaking, setIsSpeaking] = useState(false);
     const [isListening, setIsListening] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const messagesEndRef = useRef(null);
     const recognitionRef = useRef(null);
 
@@ -96,28 +99,162 @@ const Chat = () => {
         };
     }, []);
 
-    const handleSend = (e) => {
+    const handleSend = async (e) => {
         e.preventDefault();
-        if (!input.trim()) return;
+        if (!input.trim() || isLoading) return;
+
+        // Apply Rate Limit Check (5s cooldown, 15 msgs/hour max)
+        const rateLimitResult = checkRateLimit('chat_api', 5, 15);
+        if (!rateLimitResult.allowed) {
+            const warningMsg = `⚠️ Rate Limit Exceeded: ${rateLimitResult.reason}`;
+            setMessages(prev => [...prev, { role: 'ai', content: warningMsg }]);
+            speak(rateLimitResult.reason);
+            setInput('');
+            return;
+        }
 
         const userMsg = input.trim();
-        setMessages(prev => [...prev, { role: 'user', content: userMsg }]);
-        setInput('');
+        const newMessages = [...messages, { role: 'user', content: userMsg }];
 
-        // Simulate a simple AI response focusing on Pratham's profile
-        setTimeout(() => {
-            let aiMsg = "I'm still learning about Pratham, but I know he is a skilled full-stack developer passionate about building great products. Check out his Resume or Skills page to learn more!";
-            if (userMsg.toLowerCase().includes('skill') || userMsg.toLowerCase().includes('tech')) {
-                aiMsg = "Pratham is skilled in React.js, Node.js, Python, TailwindCSS, AWS, and much more. You can see the full list on the Skills page!";
-            } else if (userMsg.toLowerCase().includes('contact') || userMsg.toLowerCase().includes('reach')) {
-                aiMsg = "You can reach Pratham at prathamvernekar05@gmail.com, or find him on LinkedIn and GitHub!";
-            } else if (userMsg.toLowerCase().includes('project')) {
-                aiMsg = "Pratham has worked on some cool projects like the Pathshala AI platform and other full-stack web applications.";
+        setMessages(newMessages);
+        setInput('');
+        setIsLoading(true);
+
+        try {
+            const apiKey = import.meta.env.VITE_GROQ_API_KEY;
+
+            if (!apiKey) {
+                const errorMsg = "Error: Groq API key is missing. Please add VITE_GROQ_API_KEY to your .env file.";
+                setMessages(prev => [...prev, { role: 'ai', content: errorMsg }]);
+                speak(errorMsg);
+                setIsLoading(false);
+                return;
             }
 
+            const systemPrompt = {
+                role: "system",
+                content: `You are "Prat AI", the personal AI assistant of Pratham Rajesh Vernekar.
+
+About Pratham:
+Name: Pratham Rajesh Vernekar
+Age: 20
+Date of Birth: 05 May 2005
+Current Location: Bengaluru, India
+Relationship Status: Single (but ready to mingle 😄)
+sexual orientation: Straight
+
+
+Education:
+- Schooling: Rashtrotthana Vidya Kendra, Dharwad (Completed in 2021)
+- Pre-University: Expert PU College, Mangaluru (Completed in 2023)
+- B.Tech in Computer Science: RV University, Bengaluru (Expected Graduation 2027)
+
+Academic Performance:
+- Current CGPA: 8
+- 5th Semester SGPA: 8.75
+- 4th Semester SGPA: 8.45
+
+Programming Languages:
+C, C++, Java, Python
+
+Technical Interests:
+Artificial Intelligence
+Machine Learning
+Internet of Things (IoT)
+Cloud Computing
+Full Stack Development
+
+Projects by Pratham (ALWAYS Provide GitHub Links):
+1. Hospital Management System (HMS): A full-stack hospital management platform. [GitHub Repo](https://github.com/prv05/Hospital_Management_System)
+2. SkillSpeak AI: An AI-powered interview and communication assessment platform. [GitHub Repo](https://github.com/prv05/SkillspeakAI)
+3. Smart Road (IoT Project): An IoT-based smart road infrastructure concept.
+4. SmartPass: Intelligent Crowd Safety & Stampede Prevention System. [GitHub Repo](https://github.com/prv05/smartpass)
+5. VyapariAI: AI MBA Business Copilot for Bharat. [GitHub Repo](https://github.com/prv05/VyapariAI)
+6. PathshalaAI: AI RAG-based tutor for grades 6-10. [GitHub Repo](https://github.com/prv05/PathShalaAI)
+7. AI Resume Builder: An AI-powered resume generator using APIs. [GitHub Repo](https://github.com/prv05/AI-Powered-Resume-Builder)
+8. Emojify: Real-Time Facial Emotion Detection and Emoji Reactions.[GitHub Repo](https://github.com/nghn0/Emojify)
+9. Automotive E-Commerce: 3D car visualizations. [GitHub Repo](https://github.com/prv05/Automotive_E-Commerce_website_3d)
+
+Personality & Interests:
+- Passionate about solving real-world problems using AI and IoT
+- Loves cars and technology
+- Enjoys playing games in free time
+- Interested in building innovative tech products
+
+Availability:
+Pratham is currently in his 6th semester. He is generally free:
+- Wednesday and Thursday: 6 PM - 8 PM
+- Saturday
+
+PRATHAM'S LINKS & CONTACT:
+- Email: [prathamvernekar05@gmail.com](mailto:prathamvernekar05@gmail.com)
+- GitHub: [github.com/prv05](https://github.com/prv05)
+- LinkedIn: [in/prathamvernekar](https://www.linkedin.com/in/pratham-vernekar))
+
+CRITICAL INSTRUCTIONS FOR AI:
+1. ACT HUMAN: Speak casually but professionally, like a friendly human colleague chatting over coffee.
+2. BE CONCISE: Get straight to the point. Keep answers to 1-3 short paragraphs maximum.
+3. PROVIDE LINKS: Whenever mentioning a project, ALWAYS provide the Markdown link to it.
+4. PROMOTE PRATHAM: Highlight his role as a Cloud Engineer and Full Stack Developer with AI and IoT experience.
+5. If someone asks something unrelated to Pratham or his tech stack, politely pivot back to discussing his work, projects, or how to contact him.`
+            };
+
+            // Format previous messages for the API
+            const apiMessages = [
+                systemPrompt,
+                ...newMessages.map(msg => ({
+                    role: msg.role === 'ai' ? 'assistant' : 'user',
+                    content: msg.content
+                }))
+            ];
+
+            const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${apiKey}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    model: 'qwen/qwen3-32b',
+                    messages: apiMessages,
+                    temperature: 0.6,
+                    max_tokens: 4096,
+                    top_p: 0.95
+                })
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                const errorDetail = data?.error?.message || response.statusText;
+                throw new Error(errorDetail);
+            }
+
+            let aiMsg = data.choices[0].message.content;
+
+            // The qwen3-32b model is a reasoning model that outputs its thought process.
+            // We strip out the <think>...</think> blocks so it isn't displayed or spoken.
+            aiMsg = aiMsg.replace(/<think>[\s\S]*?<\/think>\n*/g, '').trim();
+
+            // Clean markdown for speech synthesis (remove URLs and formatting)
+            const textToSpeak = aiMsg
+                .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1') // Extract text from links: [text](url) -> text
+                .replace(/[*_~`#]/g, '') // Remove common markdown formatting characters
+                .replace(/(https?:\/\/[^\s]+)/g, 'a link') // Replace raw URLs if any exist
+                .replace(/[\u1000-\uFFFF]+/g, '') // Remove wide range of characters including emojis
+                .replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, ''); // Remove surrogate pairs (most emojis)
+
             setMessages(prev => [...prev, { role: 'ai', content: aiMsg }]);
-            speak(aiMsg);
-        }, 1000);
+            speak(textToSpeak);
+
+        } catch (error) {
+            console.error("Error fetching from Groq:", error);
+            const fallbackMsg = `Sorry, I'm having trouble connecting to my brain right now. The server reported the following error: ${error.message}`;
+            setMessages(prev => [...prev, { role: 'ai', content: fallbackMsg }]);
+            speak("I encountered a connection error. Please check the chat logs.");
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     return (
@@ -158,10 +295,33 @@ const Chat = () => {
                                 ? 'bg-[#fd5108] text-white rounded-tr-sm'
                                 : 'bg-white/10 text-white/90 rounded-tl-sm border border-white/5'
                                 }`}>
-                                {msg.content}
+                                {msg.role === 'ai' ? (
+                                    <div className="flex flex-col gap-2 leading-relaxed">
+                                        <ReactMarkdown
+                                            components={{
+                                                a: ({ node, ...props }) => <a className="text-[#fd5108] underline hover:text-orange-400 font-medium transition-colors" target="_blank" rel="noopener noreferrer" {...props} />,
+                                                strong: ({ node, ...props }) => <strong className="font-semibold text-white" {...props} />,
+                                                p: ({ node, ...props }) => <p className="mb-1 last:mb-0" {...props} />
+                                            }}
+                                        >
+                                            {msg.content}
+                                        </ReactMarkdown>
+                                    </div>
+                                ) : (
+                                    msg.content
+                                )}
                             </div>
                         </div>
                     ))}
+                    {isLoading && (
+                        <div className="flex justify-start">
+                            <div className="max-w-[75%] p-4 rounded-2xl text-sm bg-white/10 text-white/50 rounded-tl-sm border border-white/5 flex items-center gap-2">
+                                <div className="w-2 h-2 rounded-full bg-white/50 animate-bounce"></div>
+                                <div className="w-2 h-2 rounded-full bg-white/50 animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                                <div className="w-2 h-2 rounded-full bg-white/50 animate-bounce" style={{ animationDelay: '0.4s' }}></div>
+                            </div>
+                        </div>
+                    )}
                     <div ref={messagesEndRef} />
                 </div>
 

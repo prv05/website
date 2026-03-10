@@ -8,7 +8,7 @@ const AIFloatingIcon = () => {
 
     return (
         <div
-            className="fixed bottom-8 right-8 z-50 flex items-center gap-3"
+            className="fixed bottom-28 md:bottom-8 right-4 md:right-8 z-50 flex items-center gap-3"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
         >
@@ -16,7 +16,7 @@ const AIFloatingIcon = () => {
             <div
                 className={`
                     bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 rounded-xl text-white text-sm font-medium
-                    transition-all duration-300 transform origin-right
+                    transition-all duration-300 transform origin-right hidden md:block
                     ${isHovered ? 'scale-100 opacity-100 translate-x-0' : 'scale-90 opacity-0 translate-x-4 pointer-events-none'}
                 `}
             >
@@ -26,7 +26,7 @@ const AIFloatingIcon = () => {
             {/* Bubble Button */}
             <button
                 onClick={() => navigate('/chat')}
-                className="w-16 h-16 rounded-full bg-gradient-to-tr from-[#fd5108] to-orange-400 p-[2px] cursor-pointer shadow-[0_0_20px_rgba(253,81,8,0.4)] hover:shadow-[0_0_35px_rgba(253,81,8,0.7)] transition-all duration-300 transform hover:-translate-y-1 hover:scale-105 group flex items-center justify-center bg-[#050505]"
+                className="w-14 h-14 md:w-16 md:h-16 rounded-full bg-gradient-to-tr from-[#fd5108] to-orange-400 p-[2px] cursor-pointer shadow-[0_0_20px_rgba(253,81,8,0.4)] hover:shadow-[0_0_35px_rgba(253,81,8,0.7)] transition-all duration-300 transform hover:-translate-y-1 hover:scale-105 group flex items-center justify-center bg-[#050505]"
             >
                 <div className="w-full h-full rounded-full bg-[#0a0a0a] flex items-center justify-center relative overflow-hidden group-hover:bg-[#fd5108]/10 transition-colors duration-300">
                     <img src={aiAvatar} alt="PRAT" className="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity" />

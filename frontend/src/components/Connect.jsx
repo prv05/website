@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { checkRateLimit } from '../utils/rateLimiter';
 
 const Connect = () => {
     // Generate 25 random icons for the background
@@ -27,6 +28,69 @@ const Connect = () => {
 
         setBgIcons(generatedIcons);
     }, []);
+
+    const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+    const [submitStatus, setSubmitStatus] = useState({ typing: false, message: '', isError: false });
+
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.id]: e.target.value });
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        // Apply Rate Limit Check (60s cooldown, 3 forms/hour max)
+        const rateLimitResult = checkRateLimit('contact_form', 60, 3);
+        if (!rateLimitResult.allowed) {
+            setSubmitStatus({
+                typing: false,
+                message: rateLimitResult.reason,
+                isError: true
+            });
+            return;
+        }
+
+        setSubmitStatus({ typing: true, message: 'Sending...', isError: false });
+
+        const accessKey = import.meta.env.VITE_WEB3FORMS_ACCESS_KEY;
+        if (!accessKey) {
+            setSubmitStatus({ typing: false, message: 'Error: Web3Forms access key is missing in .env', isError: true });
+            return;
+        }
+
+        try {
+            const response = await fetch('https://api.web3forms.com/submit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    access_key: accessKey,
+                    name: formData.name,
+                    email: formData.email,
+                    message: formData.message
+                })
+            });
+
+            const result = await response.json();
+            if (response.status === 200) {
+                setSubmitStatus({ typing: false, message: 'Message sent successfully!', isError: false });
+                setFormData({ name: '', email: '', message: '' }); // clear form
+
+                // Clear success message after 5 seconds
+                setTimeout(() => {
+                    setSubmitStatus({ typing: false, message: '', isError: false });
+                }, 5000);
+            } else {
+                console.error("Web3Forms Error:", result);
+                setSubmitStatus({ typing: false, message: result.message || 'Something went wrong. Please try again.', isError: true });
+            }
+        } catch (error) {
+            console.error("Fetch Error:", error);
+            setSubmitStatus({ typing: false, message: 'Network error. Please try again later.', isError: true });
+        }
+    };
 
     return (
         <section id="connect" className="min-h-screen w-full flex items-center justify-center pt-[100px] md:pt-[125px] pb-20 px-5 md:px-20 relative z-10 border-t border-white/5 overflow-hidden">
@@ -82,27 +146,36 @@ const Connect = () => {
                     {/* Left: Contact Form */}
                     <div className="w-full lg:w-3/5 group animate-[fadeInUp_0.6s_ease-out_both_0.15s]">
                         <div className="relative w-full p-8 md:p-10 rounded-3xl bg-[#050505]/60 border border-white/10 backdrop-blur-md shadow-[0_10px_30px_rgba(0,0,0,0.5)] transition-all duration-300 hover:border-[#fd5108]/30">
-                            <form className="flex flex-col gap-6">
+                            <form onSubmit={handleSubmit} className="flex flex-col gap-6">
                                 <div className="flex flex-col md:flex-row gap-6">
                                     <div className="flex flex-col gap-2 flex-1">
                                         <label htmlFor="name" className="text-white/70 text-sm font-medium ml-1">Name</label>
-                                        <input type="text" id="name" placeholder="John Doe" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/20 focus:outline-none focus:border-[#fd5108]/50 focus:bg-white/10 transition-all duration-300" required />
+                                        <input type="text" id="name" value={formData.name} onChange={handleChange} placeholder="John Doe" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/20 focus:outline-none focus:border-[#fd5108]/50 focus:bg-white/10 transition-all duration-300" required />
                                     </div>
                                     <div className="flex flex-col gap-2 flex-1">
                                         <label htmlFor="email" className="text-white/70 text-sm font-medium ml-1">Email</label>
-                                        <input type="email" id="email" placeholder="john@example.com" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/20 focus:outline-none focus:border-[#fd5108]/50 focus:bg-white/10 transition-all duration-300" required />
+                                        <input type="email" id="email" value={formData.email} onChange={handleChange} placeholder="john@example.com" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/20 focus:outline-none focus:border-[#fd5108]/50 focus:bg-white/10 transition-all duration-300" required />
                                     </div>
                                 </div>
                                 <div className="flex flex-col gap-2">
                                     <label htmlFor="message" className="text-white/70 text-sm font-medium ml-1">Message</label>
-                                    <textarea id="message" rows="5" placeholder="How can I help you?" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/20 focus:outline-none focus:border-[#fd5108]/50 focus:bg-white/10 transition-all duration-300 resize-none" required></textarea>
+                                    <textarea id="message" rows="5" value={formData.message} onChange={handleChange} placeholder="How can I help you?" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/20 focus:outline-none focus:border-[#fd5108]/50 focus:bg-white/10 transition-all duration-300 resize-none" required></textarea>
                                 </div>
-                                <button type="submit" className="mt-2 w-full md:w-auto self-end bg-[#fd5108] hover:bg-[#ff6929] text-white font-semibold py-3 px-8 rounded-full transition-all duration-300 shadow-[0_0_20px_rgba(253,81,8,0.3)] hover:shadow-[0_0_30px_rgba(253,81,8,0.5)] hover:-translate-y-1 flex items-center justify-center gap-2">
-                                    Send Message
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-4 h-4">
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75" />
-                                    </svg>
-                                </button>
+
+                                <div className="flex flex-col md:flex-row justify-between items-center gap-4 mt-2">
+                                    <div className={`text-sm font-medium transition-opacity duration-300 ${submitStatus.message ? 'opacity-100' : 'opacity-0'} ${submitStatus.isError ? 'text-red-400' : 'text-green-400'}`}>
+                                        {submitStatus.message}
+                                    </div>
+
+                                    <button type="submit" disabled={submitStatus.typing} className="w-full md:w-auto self-end bg-[#fd5108] hover:bg-[#ff6929] text-white font-semibold py-3 px-8 rounded-full transition-all duration-300 shadow-[0_0_20px_rgba(253,81,8,0.3)] hover:shadow-[0_0_30px_rgba(253,81,8,0.5)] hover:-translate-y-1 flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed">
+                                        {submitStatus.typing ? 'Sending...' : 'Send Message'}
+                                        {!submitStatus.typing && (
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-4 h-4">
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75" />
+                                            </svg>
+                                        )}
+                                    </button>
+                                </div>
                             </form>
                         </div>
                     </div>

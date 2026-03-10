@@ -7,7 +7,7 @@ const Resume = () => {
     return (
         <section
             id="resume"
-            className="min-h-screen w-full flex flex-col items-center justify-start py-28 px-5 md:px-20 relative z-10 border-t border-white/5"
+            className="min-h-screen w-full flex flex-col items-center justify-start pt-28 pb-28 md:pb-10 px-5 md:px-20 relative z-10 border-t border-white/5"
         >
             <div className="max-w-5xl w-full mx-auto flex flex-col gap-10">
 
